@@ -9,8 +9,8 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 from torchvision.models import resnet101, ResNet101_Weights
 
-from models.wideresnet import *
-from models.resnet import *
+#from models.wideresnet import *
+#from models.resnet import *
 from trades import trades_loss
 
 parser = argparse.ArgumentParser(description='PyTorch CIFAR TRADES Adversarial Training')
