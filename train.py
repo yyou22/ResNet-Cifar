@@ -153,6 +153,9 @@ def main():
     # init model, ResNet18() can be also used here for training
     #model = resnet101(weights=ResNet101_Weights.DEFAULT)
     model = resnet101()
+    model.fc = nn.Linear(2048, 10)
+    model = model.to(device)
+
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.weight_decay)
 
     for epoch in range(1, args.epochs + 1):
