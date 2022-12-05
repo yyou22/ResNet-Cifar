@@ -42,7 +42,7 @@ parser.add_argument('--log-interval', type=int, default=100, metavar='N',
                     help='how many batches to wait before logging training status')
 parser.add_argument('--model-dir', default='./model-cifar-wideResNet',
                     help='directory of model for saving checkpoint')
-parser.add_argument('--save-freq', '-s', default=1, type=int, metavar='N',
+parser.add_argument('--save-freq', '-s', default=5, type=int, metavar='N',
                     help='save frequency')
 
 args = parser.parse_args()
