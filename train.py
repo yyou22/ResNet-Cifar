@@ -156,7 +156,7 @@ def main():
     #model = resnet101(weights=ResNet101_Weights.DEFAULT)
     #model = resnet101()
     #model.fc = nn.Linear(2048, 10)
-    model = ResNet18()
+    model = ResNet18().to(device)
     #model = model.to(device)
 
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.weight_decay)
