@@ -10,7 +10,7 @@ from torchvision import datasets, transforms
 from torchvision.models import resnet101, ResNet101_Weights
 
 #from models.wideresnet import *
-#from models.resnet import *
+from models.resnet import *
 from trades import trades_loss
 
 parser = argparse.ArgumentParser(description='PyTorch CIFAR TRADES Adversarial Training')
@@ -61,11 +61,11 @@ transform_train = transforms.Compose([
     transforms.RandomCrop(32, padding=4),
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
-    transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2471, 0.2435, 0.2616)),
+    #transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2471, 0.2435, 0.2616)),
 ])
 transform_test = transforms.Compose([
     transforms.ToTensor(),
-    transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2471, 0.2435, 0.2616)),
+    #transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2471, 0.2435, 0.2616)),
 ])
 trainset = torchvision.datasets.CIFAR10(root='../data', train=True, download=True, transform=transform_train)
 train_loader = torch.utils.data.DataLoader(trainset, batch_size=args.batch_size, shuffle=True, **kwargs)
@@ -153,10 +153,11 @@ def adjust_learning_rate(optimizer, epoch):
 
 def main():
     # init model, ResNet18() can be also used here for training
-    model = resnet101(weights=ResNet101_Weights.DEFAULT)
+    #model = resnet101(weights=ResNet101_Weights.DEFAULT)
     #model = resnet101()
-    model.fc = nn.Linear(2048, 10)
-    model = model.to(device)
+    #model.fc = nn.Linear(2048, 10)
+    model = ResNet18()
+    #model = model.to(device)
 
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.weight_decay)
 
