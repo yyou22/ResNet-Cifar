@@ -151,8 +151,8 @@ def adjust_learning_rate(optimizer, epoch):
 
 def main():
     # init model, ResNet18() can be also used here for training
-    #model = resnet101(weights=ResNet101_Weights.DEFAULT)
-    model = resnet101()
+    model = resnet101(weights=ResNet101_Weights.DEFAULT)
+    #model = resnet101()
     model.fc = nn.Linear(2048, 10)
     model = model.to(device)
 
