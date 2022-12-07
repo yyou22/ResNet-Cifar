@@ -7,9 +7,8 @@ import torch.nn.functional as F
 import torchvision
 import torch.optim as optim
 from torchvision import datasets, transforms
-from torchvision.models import resnet101, ResNet101_Weights
 
-#from models.wideresnet import *
+from models.wideresnet import *
 from models.resnet import *
 from trades import trades_loss
 
@@ -18,7 +17,7 @@ parser.add_argument('--batch-size', type=int, default=128, metavar='N',
                     help='input batch size for training (default: 128)')
 parser.add_argument('--test-batch-size', type=int, default=128, metavar='N',
                     help='input batch size for testing (default: 128)')
-parser.add_argument('--epochs', type=int, default=100, metavar='N',
+parser.add_argument('--epochs', type=int, default=76, metavar='N',
                     help='number of epochs to train')
 parser.add_argument('--weight-decay', '--wd', default=2e-4,
                     type=float, metavar='W')
@@ -40,9 +39,9 @@ parser.add_argument('--seed', type=int, default=1, metavar='S',
                     help='random seed (default: 1)')
 parser.add_argument('--log-interval', type=int, default=100, metavar='N',
                     help='how many batches to wait before logging training status')
-parser.add_argument('--model-dir', default='./model-cifar-ResNet',
+parser.add_argument('--model-dir', default='./model-cifar-wideResNet',
                     help='directory of model for saving checkpoint')
-parser.add_argument('--save-freq', '-s', default=10, type=int, metavar='N',
+parser.add_argument('--save-freq', '-s', default=1, type=int, metavar='N',
                     help='save frequency')
 
 args = parser.parse_args()
@@ -61,11 +60,9 @@ transform_train = transforms.Compose([
     transforms.RandomCrop(32, padding=4),
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
-    #transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2471, 0.2435, 0.2616)),
 ])
 transform_test = transforms.Compose([
     transforms.ToTensor(),
-    #transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2471, 0.2435, 0.2616)),
 ])
 trainset = torchvision.datasets.CIFAR10(root='../data', train=True, download=True, transform=transform_train)
 train_loader = torch.utils.data.DataLoader(trainset, batch_size=args.batch_size, shuffle=True, **kwargs)
@@ -80,16 +77,15 @@ def train(args, model, device, train_loader, optimizer, epoch):
 
         optimizer.zero_grad()
 
-        loss = F.cross_entropy(model(data), target)
         # calculate robust loss
-        #loss = trades_loss(model=model,
-                           #x_natural=data,
-                           #y=target,
-                           #optimizer=optimizer,
-                           #step_size=args.step_size,
-                           #epsilon=args.epsilon,
-                           #perturb_steps=args.num_steps,
-                           #beta=args.beta)
+        loss = trades_loss(model=model,
+                           x_natural=data,
+                           y=target,
+                           optimizer=optimizer,
+                           step_size=args.step_size,
+                           epsilon=args.epsilon,
+                           perturb_steps=args.num_steps,
+                           beta=args.beta)
         loss.backward()
         optimizer.step()
 
@@ -153,12 +149,8 @@ def adjust_learning_rate(optimizer, epoch):
 
 def main():
     # init model, ResNet18() can be also used here for training
-    #model = resnet101(weights=ResNet101_Weights.DEFAULT)
-    #model = resnet101()
-    #model.fc = nn.Linear(2048, 10)
+    #model = WideResNet().to(device)
     model = ResNet18().to(device)
-    #model = model.to(device)
-
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.weight_decay)
 
     for epoch in range(1, args.epochs + 1):
