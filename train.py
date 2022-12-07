@@ -40,7 +40,7 @@ parser.add_argument('--seed', type=int, default=1, metavar='S',
                     help='random seed (default: 1)')
 parser.add_argument('--log-interval', type=int, default=100, metavar='N',
                     help='how many batches to wait before logging training status')
-parser.add_argument('--model-dir', default='./model-cifar-wideResNet',
+parser.add_argument('--model-dir', default='./model-cifar-TRADES',
                     help='directory of model for saving checkpoint')
 parser.add_argument('--save-freq', '-s', default=10, type=int, metavar='N',
                     help='save frequency')
@@ -80,16 +80,16 @@ def train(args, model, device, train_loader, optimizer, epoch):
 
         optimizer.zero_grad()
 
-        loss = F.cross_entropy(model(data), target)
+        #loss = F.cross_entropy(model(data), target)
         # calculate robust loss
-        #loss = trades_loss(model=model,
-                           #x_natural=data,
-                           #y=target,
-                           #optimizer=optimizer,
-                           #step_size=args.step_size,
-                           #epsilon=args.epsilon,
-                           #perturb_steps=args.num_steps,
-                           #beta=args.beta)
+        loss = trades_loss(model=model,
+                           x_natural=data,
+                           y=target,
+                           optimizer=optimizer,
+                           step_size=args.step_size,
+                           epsilon=args.epsilon,
+                           perturb_steps=args.num_steps,
+                           beta=args.beta)
         loss.backward()
         optimizer.step()
 
