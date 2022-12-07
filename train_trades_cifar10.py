@@ -13,7 +13,7 @@ from models.resnet import *
 from trades import trades_loss
 
 parser = argparse.ArgumentParser(description='PyTorch CIFAR TRADES Adversarial Training')
-parser.add_argument('--batch-size', type=int, default=128, metavar='N',
+parser.add_argument('--batch-size', type=int, default=64, metavar='N',
                     help='input batch size for training (default: 128)')
 parser.add_argument('--test-batch-size', type=int, default=128, metavar='N',
                     help='input batch size for testing (default: 128)')
@@ -77,16 +77,16 @@ def train(args, model, device, train_loader, optimizer, epoch):
 
         optimizer.zero_grad()
 
-        loss = F.cross_entropy(model(data), target)
+        #loss = F.cross_entropy(model(data), target)
         # calculate robust loss
-        #loss = trades_loss(model=model,
-                           #x_natural=data,
-                           #y=target,
-                           #optimizer=optimizer,
-                           #step_size=args.step_size,
-                           #epsilon=args.epsilon,
-                           #perturb_steps=args.num_steps,
-                           #beta=args.beta)
+        loss = trades_loss(model=model,
+                           x_natural=data,
+                           y=target,
+                           optimizer=optimizer,
+                           step_size=args.step_size,
+                           epsilon=args.epsilon,
+                           perturb_steps=args.num_steps,
+                           beta=args.beta)
         loss.backward()
         optimizer.step()
 
