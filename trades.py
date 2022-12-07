@@ -83,5 +83,5 @@ def trades_loss(model,
     loss = loss_natural + beta * loss_robust
     #print("loss_natural:" + str(loss_natural))
     #print("loss_robust:" + str(loss_robust))
-    print("loss:" + str(loss))
+    #print("loss:" + str(loss))
     return loss
