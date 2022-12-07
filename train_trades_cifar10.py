@@ -17,7 +17,7 @@ parser.add_argument('--batch-size', type=int, default=128, metavar='N',
                     help='input batch size for training (default: 128)')
 parser.add_argument('--test-batch-size', type=int, default=128, metavar='N',
                     help='input batch size for testing (default: 128)')
-parser.add_argument('--epochs', type=int, default=100, metavar='N',
+parser.add_argument('--epochs', type=int, default=76, metavar='N',
                     help='number of epochs to train')
 parser.add_argument('--weight-decay', '--wd', default=2e-4,
                     type=float, metavar='W')
@@ -33,7 +33,7 @@ parser.add_argument('--num-steps', default=10,
                     help='perturb number of steps')
 parser.add_argument('--step-size', default=0.007,
                     help='perturb step size')
-parser.add_argument('--beta', default=5.0,
+parser.add_argument('--beta', default=6.0,
                     help='regularization, i.e., 1/lambda in TRADES')
 parser.add_argument('--seed', type=int, default=1, metavar='S',
                     help='random seed (default: 1)')
@@ -149,8 +149,7 @@ def adjust_learning_rate(optimizer, epoch):
 
 def main():
     # init model, ResNet18() can be also used here for training
-    #model = WideResNet().to(device)
-    model = ResNet18().to(device)
+    model = WideResNet().to(device)
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.weight_decay)
 
     for epoch in range(1, args.epochs + 1):
