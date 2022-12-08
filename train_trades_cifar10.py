@@ -152,7 +152,8 @@ def adjust_learning_rate(optimizer, epoch):
 
 def main():
     # init model, ResNet18() can be also used here for training
-    model = ResNet18().to(device)
+    #model = ResNet18().to(device)
+    model = ResNet34().to(device)
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.weight_decay)
 
     for epoch in range(1, args.epochs + 1):
